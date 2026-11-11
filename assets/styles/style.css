@@ -45,6 +45,17 @@ body {
   gap: 0;
 }
 
+/* 
+--hour: 13;
+--hoursProgress: 0.5;
+
+--minute: 27;
+--minutesProgress: 0.5;
+
+--second: 13;
+--secondsProgress: 0.5;
+ */
+
 .bars {
   position: relative;
 
@@ -53,90 +64,62 @@ body {
 }
 
 .bars__unit {
+  --value: var(--seconds-progress);
+
   position: relative;
+  width: calc(var(--value) * 100%);
   flex: 1;
 
   background-color: blue;
 }
 
-#bars-hour {
-  width: calc(var(--hours-progress) * 100%);
-  background: red;
-}
-
 #bars-minute {
-  width: calc(var(--minutes-progress) * 100%);
-  background: lime;
+  --value: var(--minutes-progress);
+
+  background-color: red;
 }
 
-#bars-second {
-  width: calc(var(--seconds-progress) * 100%);
+#bars-hour {
+  --value: var(--hours-progress);
+
+  background-color: lime;
 }
 
 .grid {
+  position: relative;
+
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(6, 1fr);
-
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgb(125, 125, 125) 0,
-    rgb(125, 125, 125) calc(100% / 6 / 3),
-    rgb(175, 175, 175) calc(100% / 6 / 3),
-    rgb(175, 175, 175) calc((100% / 6 / 3) * 2),
-    rgb(225, 225, 225) calc((100% / 6 / 3) * 2),
-    rgb(225, 225, 225) calc((100% / 6 / 3) * 3)
-  );
 }
 
 .grid__unit {
   --value: var(--second);
-  --column: calc(mod((var(--value)), 10) + 1);
-  --row: round(up, calc((var(--value) + 1) / 10));
+  --column: calc(mod(var(--value), 10) + 1);
+  --row: round(up, calc(var(--value) + 1) / 10);
 
   position: relative;
   height: calc(100% / 3);
 
   grid-column: var(--column) / var(--column);
   grid-row: var(--row);
-
   align-self: flex-end;
 
   background-color: tomato;
 }
 
-.grid__unit::after {
-  --value: var(--second);
-
-  counter-reset: value var(--value);
-  content: counter(value);
-  position: absolute;
-
-  top: 100%;
-  left: 100%;
-
-  background-color: inherit;
-  z-index: 999;
-}
-
-#grid-minute::after {
-  --value: var(--minute);
-}
-
-#grid-hour::after {
-  --value: var(--hour);
-}
-
 #grid-minute {
   --value: var(--minute);
-  background-color: violet;
   align-self: center;
+
+  background-color: rgb(71, 255, 83);
 }
 
 #grid-hour {
-  --value: calc(var(--hour) * 2.5);
-  background-color: darkorange;
+  --value: var(--hour);
   align-self: flex-start;
+
+  background-color: rgb(80, 71, 255);
 }
 
 .clock {
@@ -145,7 +128,7 @@ body {
 
 .clock__unit {
   --value: var(--seconds-progress);
-  --color: rgb(0, 0, 255);
+  --color: red;
 
   position: absolute;
   top: 50%;
@@ -155,21 +138,21 @@ body {
   width: 1px;
 
   transform: translate(-50%, -50%) rotate(calc(var(--value) * 360deg));
-
   background-image: linear-gradient(var(--color) 50%, transparent 50%);
-  overflow: visible;
 }
 
 #clock-minute {
   --value: var(--minutes-progress);
+  --color: lime;
+
   height: 75%;
-  --color: sienna;
 }
 
 #clock-hour {
-  --value: var(--hours-progress);
+  --value: calc(var(--hours-progress) * 2);
+  --color: orange;
+
   height: 100%;
-  --color: red;
 }
 
 .colors {
