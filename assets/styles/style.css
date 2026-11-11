@@ -39,6 +39,261 @@ body {
 .main {
   flex: 3;
 
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0;
+}
+
+.bars {
+  position: relative;
+
   display: flex;
   flex-flow: column;
+}
+
+.bars__unit {
+  position: relative;
+  flex: 1;
+
+  background-color: blue;
+}
+
+#bars-hour {
+  width: calc(var(--hours-progress) * 100%);
+  background: red;
+}
+
+#bars-minute {
+  width: calc(var(--minutes-progress) * 100%);
+  background: lime;
+}
+
+#bars-second {
+  width: calc(var(--seconds-progress) * 100%);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(125, 125, 125) 0,
+    rgb(125, 125, 125) calc(100% / 6 / 3),
+    rgb(175, 175, 175) calc(100% / 6 / 3),
+    rgb(175, 175, 175) calc((100% / 6 / 3) * 2),
+    rgb(225, 225, 225) calc((100% / 6 / 3) * 2),
+    rgb(225, 225, 225) calc((100% / 6 / 3) * 3)
+  );
+}
+
+.grid__unit {
+  --value: var(--second);
+  --column: calc(mod((var(--value)), 10) + 1);
+  --row: round(up, calc((var(--value) + 1) / 10));
+
+  position: relative;
+  height: calc(100% / 3);
+
+  grid-column: var(--column) / var(--column);
+  grid-row: var(--row);
+
+  align-self: flex-end;
+
+  background-color: tomato;
+}
+
+.grid__unit::after {
+  --value: var(--second);
+
+  counter-reset: value var(--value);
+  content: counter(value);
+  position: absolute;
+
+  top: 100%;
+  left: 100%;
+
+  background-color: inherit;
+  z-index: 999;
+}
+
+#grid-minute::after {
+  --value: var(--minute);
+}
+
+#grid-hour::after {
+  --value: var(--hour);
+}
+
+#grid-minute {
+  --value: var(--minute);
+  background-color: violet;
+  align-self: center;
+}
+
+#grid-hour {
+  --value: calc(var(--hour) * 2.5);
+  background-color: darkorange;
+  align-self: flex-start;
+}
+
+.clock {
+  position: relative;
+}
+
+.clock__unit {
+  --value: var(--seconds-progress);
+  --color: rgb(0, 0, 255);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  height: 50%;
+  width: 1px;
+
+  transform: translate(-50%, -50%) rotate(calc(var(--value) * 360deg));
+
+  background-image: linear-gradient(var(--color) 50%, transparent 50%);
+  overflow: visible;
+}
+
+#clock-minute {
+  --value: var(--minutes-progress);
+  height: 75%;
+  --color: sienna;
+}
+
+#clock-hour {
+  --value: var(--hours-progress);
+  height: 100%;
+  --color: red;
+}
+
+.colors {
+  --hue: calc(var(--hours-progress) * 360);
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  gap: 15%;
+  align-items: center;
+
+  background-image: linear-gradient(
+    to right,
+    hsl(calc(var(--hours-progress) * 360), 100%, 50%),
+    hsl(calc(var(--minutes-progress) * 360), 100%, 50%),
+    hsl(calc(var(--seconds-progress) * 360), 100%, 50%)
+  );
+}
+
+.colors__unit {
+  --value: var(--seconds-progress);
+
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  aspect-ratio: 1;
+
+  background-color: hsl(
+    calc(var(--value) * 360 + 180),
+    calc(var(--value) * 100%),
+    50%
+  );
+}
+
+#colors-minute {
+  --value: var(--minutes-progress);
+}
+
+#colors-hour {
+  --value: var(--hours-progress);
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  position: relative;
+}
+
+.spin__unit {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 35%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: calc(var(--hours-progress) * 50%);
+
+  background-color: blue;
+  animation: rotate 1s ease-in-out infinite;
+}
+
+#spin-minute {
+  top: 40%;
+  left: unset;
+  right: 10%;
+  width: 25%;
+  border-radius: calc(var(--minutes-progress) * 50%);
+  background-color: red;
+
+  animation-delay: 0.3s;
+  animation-direction: alternate-reverse;
+}
+
+#spin-second {
+  top: unset;
+  bottom: 10%;
+  left: 40%;
+  width: 15%;
+
+  border-radius: calc(var(--seconds-progress) * 50%);
+
+  background-color: violet;
+
+  animation-delay: 0.6s;
+  animation-direction: reverse;
+}
+
+.circle {
+  position: relative;
+
+  border: 1px solid black;
+  border-radius: 100%;
+  margin: 10%;
+}
+
+.circle__unit {
+  --value: var(--seconds-progress);
+  --angle: calc(var(--value) * 360deg);
+  --radius: 50%;
+
+  position: absolute;
+  top: calc(50% - var(--radius) * cos(var(--angle)));
+  left: calc(50% + var(--radius) * sin(var(--angle)));
+  transform: translate(-50%, -50%) scale(calc(var(--value) * 1.75 + 0.25));
+
+  width: 1rem;
+  height: 1rem;
+
+  background-color: red;
+}
+
+#circle-minute {
+  --value: var(--minutes-progress);
+  background-color: blue;
+}
+
+#circle-hour {
+  --value: var(--hours-progress);
+  background-color: green;
 }
